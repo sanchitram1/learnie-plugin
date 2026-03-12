@@ -1,6 +1,6 @@
 import { Notice, TFile, Vault, moment } from "obsidian";
 import { checkIfDerivativeFileIsValid, createNewFile, deleteFile, getFile, modifyFrontmatter, QUESTION_FOLDER_PATH, readFrontmatter } from "./file";
-import { getNoteByNoteId, getNotesByTags, isValidNotePath } from "./note";
+import { getNoteByNoteId, getNotesByCourses, getNotesByTags, isValidNotePath } from "./note";
 import { QuestionAnswerPair, QuizQuestion } from "src/types/types";
 import { v4 as uuidv4 } from 'uuid';
 
@@ -31,8 +31,17 @@ export async function getAllQuestions() {
 
 export async function getAllQuestionsByTags(tags: Set<string>): Promise<QuizQuestion[]> {
     const notesByTags = await getNotesByTags(tags);
-    const questions = []
-    for (const note of notesByTags) {
+    return getQuizQuestionsFromNotes(notesByTags);
+}
+
+export async function getAllQuestionsByCourses(courses: Set<string>): Promise<QuizQuestion[]> {
+    const notesByCourses = await getNotesByCourses(courses);
+    return getQuizQuestionsFromNotes(notesByCourses);
+}
+
+async function getQuizQuestionsFromNotes(notes: TFile[]): Promise<QuizQuestion[]> {
+    const questions = [];
+    for (const note of notes) {
         const frontmatter = readFrontmatter(note);
         const noteId = frontmatter["id"];
         if (!noteId) {

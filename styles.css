@@ -25,6 +25,26 @@
     padding: 0px;
 }
 
+.quiz-filter-tabs {
+    display: flex;
+    gap: 16px;
+    margin-top: 8px;
+}
+
+.quiz-filter-tab {
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    color: var(--text-normal);
+    cursor: pointer;
+    font-weight: 600;
+    padding: 0 0 6px 0;
+}
+
+.quiz-filter-tab.is-active {
+    border-bottom: 2px solid var(--text-normal);
+}
+
 .modal-button-container {
     display: flex;
     justify-content: flex-end;

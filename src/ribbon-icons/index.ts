@@ -3,6 +3,7 @@ import { activateChangedNotesView, activateQuestionsView } from "../views";
 import { Plugin } from "obsidian";
 import { convertToNote } from "src/utils/note";
 import { getAllTags } from "src/utils/tags";
+import { getAllCourses } from "src/utils/courses";
 import { QuizModal } from "src/modals/quiz-modal";
 
 export function registerRibbonIcons(plugin: Plugin) {
@@ -25,7 +26,8 @@ export function registerRibbonIcons(plugin: Plugin) {
     
     plugin.addRibbonIcon("badge-help", "Start quiz", async () => {
         const tags = getAllTags()
-        new QuizModal(plugin.app, tags).open()
+        const courses = await getAllCourses()
+        new QuizModal(plugin.app, tags, courses).open()
     })
 
 }

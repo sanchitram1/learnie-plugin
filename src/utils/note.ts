@@ -1,4 +1,5 @@
 import { normalizeTag } from 'src/utils/tags';
+import { extractCourses } from 'src/utils/courses';
 import { App, moment, Notice, TFile, Vault } from "obsidian";
 import { Commands } from 'src/commands';
 import { NoteMetadata, NoteRevisionMetadata } from '../types/types';
@@ -49,6 +50,23 @@ export async function getNotesByTags(tags: Set<string>) {
     }
 
     return filesWithTags;
+}
+
+export async function getNotesByCourses(courses: Set<string>) {
+    const files = await getAllNotes();
+    const filesWithCourses: TFile[] = [];
+
+    for (const file of files) {
+        const fileCache = this.app.metadataCache.getFileCache(file);
+        const frontmatter = fileCache?.frontmatter;
+        const noteCourses = extractCourses(frontmatter?.courses);
+
+        if (noteCourses.some((course) => courses.has(course))) {
+            filesWithCourses.push(file);
+        }
+    }
+
+    return filesWithCourses;
 }
 
 /**
